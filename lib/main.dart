@@ -61,16 +61,6 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class Profile {
-  final String name;
-  final String id;
-  final String profile;
-  final String profileImg;
-  final List<String> tags;
-
-  Profile(this.name, this.id, this.profile, this.profileImg, this.tags);
-}
-
 class _MainPageState extends State<MainPage> {
   var profile = Profile(
       "牧田 隆",
@@ -92,15 +82,17 @@ class _MainPageState extends State<MainPage> {
             padding: EdgeInsets.symmetric(horizontal: 24),
             child: ProfilePage(profile: profile),
           ),
-          Container(
-            margin: const EdgeInsets.only(
-              top: 10,
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: 10,
+              ),
+              child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return ProfileDetails(title: expansionTitles[index]);
+                  },
+                  itemCount: expansionTitles.length),
             ),
-            child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return ProfileDetails(title: expansionTitles[index]);
-                },
-                itemCount: expansionTitles.length),
           )
         ],
       ),
@@ -218,4 +210,14 @@ class ProfileDetails extends StatelessWidget {
       ],
     );
   }
+}
+
+class Profile {
+  final String name;
+  final String id;
+  final String profile;
+  final String profileImg;
+  final List<String> tags;
+
+  Profile(this.name, this.id, this.profile, this.profileImg, this.tags);
 }
