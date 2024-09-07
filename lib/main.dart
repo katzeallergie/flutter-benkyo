@@ -16,10 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+          useMaterial3: true,
+          appBarTheme: AppBarTheme(color: Color.fromRGBO(198, 99, 89, 1))),
+      home: const MyHomePage(title: 'MODELY'),
     );
   }
 }
@@ -34,21 +33,55 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text("Home"),
+    Text("検索"),
+    Text("お気に入り"),
+    Text("トーク"),
+    MainPage()
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
       body: Center(
-        child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const MainPage();
-              }));
-            },
-            child: const Text("Profile")),
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "ホーム",
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "検索"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_border), label: "お気に入り"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.notifications_none), label: "トーク"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle), label: "マイページ"),
+        ],
+        currentIndex: _selectedIndex,
+        // selectedItemColor: Color.fromRGBO(227, 163, 189, 1),
+        selectedItemColor: Color.fromRGBO(187, 150, 132, 1),
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        unselectedItemColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(198, 99, 89, 1),
+        onTap: _onItemTapped,
       ),
     );
   }
@@ -73,9 +106,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("MODELY"),
-      ),
       body: Column(
         children: [
           Padding(
