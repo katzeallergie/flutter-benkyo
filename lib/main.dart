@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+// TODO: componentsに分けたりする
+// TODO: プロフィールをfirebaseから取ってくる
+// TODO: 状態管理にriverpodを使ってみる
+
 void main() {
   runApp(const MyApp());
 }
