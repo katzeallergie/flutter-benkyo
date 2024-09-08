@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:modelyprac/components/profileDetails.dart';
 import 'package:modelyprac/components/profileTop.dart';
@@ -12,37 +13,74 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  var profile = Profile(
-      "牧田 隆",
-      "@makkie2525",
-      "10歳の子供がいます。子育てしながら執行役員として働いています。\n※新規事業立ち上げメンバー募集中",
-      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-Y7rgTcW5NdDkxvwMW4Gdj2Q3G3lZVBvHHC10A3T_Iwxj0257NbTbdhvWKFOqn7nxXw6-V4P_0VFuJZ_5cQSDPxlazFKTD9N-d1A0IrX0k7LoaVpG3X9IwQ48H0zfXTJOT1JntRr0Lq3o/s1048/onepiece01_luffy.png",
-      ["執行役員", "管理職", "マーケティング", "年収1500万", "関東", "子供一人"]);
+  late FirebaseFirestore firestore;
+  var docId = "QFRuRTBoGK4DIYaVYaI0";
+  var _isLoading = true;
+  late Profile profile;
+
+  @override
+  void initState() {
+    super.initState();
+    firestore = FirebaseFirestore.instance;
+    // Profileアクセスのたびに取得してるので、状態管理とかでいい感じにする
+    _fetchProfile();
+  }
+
+  Future<void> _fetchProfile() async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(docId).get();
+
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        setState(() {
+          profile = Profile.fromSnapshot(docId, data);
+          _isLoading = false;
+        });
+      } else {
+        print("Document does not exist");
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print("Error getting profile: $e");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   var expansionTitles = ["プロフィール", "経歴", "1日の過ごし方", "相談する"];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: ProfileTop(profile: profile),
-          ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.only(
-                top: 10,
-              ),
-              child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return ProfileDetails(title: expansionTitles[index]);
-                  },
-                  itemCount: expansionTitles.length),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: ProfileTop(profile: profile),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                      top: 10,
+                    ),
+                    child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return ProfileDetails(title: expansionTitles[index]);
+                        },
+                        itemCount: expansionTitles.length),
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
     );
   }
 }

@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:modelyprac/firebase_options.dart';
 
 import 'pages/ProfilePage.dart';
 
@@ -6,7 +8,9 @@ import 'pages/ProfilePage.dart';
 // TODO: プロフィールをfirebaseから取ってくる
 // TODO: 状態管理にriverpodを使ってみる
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
