@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:modelyprac/firebase_options.dart';
+import 'package:modelyprac/pages/loginPage.dart';
 
 import 'pages/ProfilePage.dart';
 
@@ -24,15 +26,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           useMaterial3: true,
           appBarTheme: AppBarTheme(color: Color.fromRGBO(198, 99, 89, 1))),
-      home: const MyHomePage(title: 'MODELY'),
+      home: const LoginPage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.user});
 
   final String title;
+  final User user;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -41,7 +44,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
-    Text("Home"),
+    Text("user"),
     Text("検索"),
     Text("お気に入り"),
     Text("トーク"),
@@ -54,6 +57,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
+    await Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) {
+      return const LoginPage();
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,9 +73,12 @@ class _MyHomePageState extends State<MyHomePage> {
           widget.title,
           style: const TextStyle(color: Colors.white),
         ),
+        actions: [IconButton(onPressed: logout, icon: Icon(Icons.logout))],
       ),
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _selectedIndex == 0
+            ? CheckLoginUser(email: widget.user.email!)
+            : _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -89,6 +103,24 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: const Color.fromRGBO(198, 99, 89, 1),
         onTap: _onItemTapped,
       ),
+    );
+  }
+}
+
+class CheckLoginUser extends StatefulWidget {
+  const CheckLoginUser({super.key, required this.email});
+
+  final String email;
+
+  @override
+  State<CheckLoginUser> createState() => _CheckLoginUserState();
+}
+
+class _CheckLoginUserState extends State<CheckLoginUser> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text("${widget.email}\nでログインしてまする"),
     );
   }
 }
