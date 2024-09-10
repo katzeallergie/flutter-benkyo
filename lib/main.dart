@@ -44,11 +44,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
-    Text("user"),
+    Text("ホーム"),
     Text("検索"),
     Text("お気に入り"),
     Text("トーク"),
-    ProfilePage()
+    Text("hoge")
   ];
 
   void _onItemTapped(int index) {
@@ -76,8 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [IconButton(onPressed: logout, icon: Icon(Icons.logout))],
       ),
       body: Center(
-        child: _selectedIndex == 0
-            ? CheckLoginUser(email: widget.user.email!)
+        child: _selectedIndex == 4
+            ? ProfilePage(uid: widget.user.uid)
             : _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(

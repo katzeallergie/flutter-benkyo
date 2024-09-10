@@ -6,7 +6,9 @@ import 'package:modelyprac/components/profileTop.dart';
 import '../dto/profile.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({super.key, required this.uid});
+
+  final String uid;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -14,7 +16,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late FirebaseFirestore firestore;
-  var docId = "QFRuRTBoGK4DIYaVYaI0";
   var _isLoading = true;
   late Profile profile;
 
@@ -28,14 +29,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _fetchProfile() async {
     try {
-      DocumentSnapshot documentSnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(docId).get();
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.uid)
+          .get();
 
       if (documentSnapshot.exists) {
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
         setState(() {
-          profile = Profile.fromSnapshot(docId, data);
+          profile = Profile.fromSnapshot(widget.uid, data);
           _isLoading = false;
         });
       } else {
