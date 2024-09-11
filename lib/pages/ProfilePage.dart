@@ -1,57 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/components/profileDetails.dart';
 import 'package:modelyprac/components/profileTop.dart';
 
 import '../dto/profile.dart';
+import '../providers/profileProvider.dart';
+import '../providers/userProvider.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key, required this.uid});
-
-  final String uid;
+class ProfilePage extends ConsumerStatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends ConsumerState<ProfilePage> {
   late FirebaseFirestore firestore;
-  var _isLoading = true;
-  late Profile profile;
 
   @override
   void initState() {
     super.initState();
     firestore = FirebaseFirestore.instance;
-    // Profileアクセスのたびに取得してるので、状態管理とかでいい感じにする
-    _fetchProfile();
+    final user = ref.read(userProvider); // userをinitStateで取得
+    if (!ref.read(profileProvider.notifier).hasProfile() && user != null) {
+      _fetchProfile(user.uid);
+    }
   }
 
-  Future<void> _fetchProfile() async {
+  Future<void> _fetchProfile(String uid) async {
     try {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.uid)
-          .get();
+      DocumentSnapshot documentSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (documentSnapshot.exists) {
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
         setState(() {
-          profile = Profile.fromSnapshot(widget.uid, data);
-          _isLoading = false;
+          ref
+              .read(profileProvider.notifier)
+              .setProfile(Profile.fromSnapshot(uid, data));
         });
       } else {
         print("Document does not exist");
-        setState(() {
-          _isLoading = false;
-        });
+        setState(() {});
       }
     } catch (e) {
       print("Error getting profile: $e");
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
     }
   }
 
@@ -60,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isLoading
+      body: !ref.read(profileProvider.notifier).hasProfile()
           ? Center(
               child: CircularProgressIndicator(),
             )
@@ -68,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: ProfileTop(profile: profile),
+                  child: ProfileTop(profile: ref.watch(profileProvider)!),
                 ),
                 Expanded(
                   child: Container(

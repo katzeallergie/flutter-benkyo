@@ -1,19 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/firebase_options.dart';
 import 'package:modelyprac/pages/loginPage.dart';
+import 'package:modelyprac/providers/profileProvider.dart';
+import 'package:modelyprac/providers/userProvider.dart';
 
 import 'pages/ProfilePage.dart';
-
-// TODO: componentsに分けたりする
-// TODO: プロフィールをfirebaseから取ってくる
-// TODO: 状態管理にriverpodを使ってみる
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,23 +24,24 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
           useMaterial3: true,
-          appBarTheme: AppBarTheme(color: Color.fromRGBO(198, 99, 89, 1))),
+          appBarTheme:
+              const AppBarTheme(color: Color.fromRGBO(198, 99, 89, 1))),
       home: const LoginPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key, required this.title, required this.user});
 
   final String title;
   final User user;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     Text("ホーム"),
@@ -59,6 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
+    ref.read(userProvider.notifier).clearUser();
+    ref.read(profileProvider.notifier).clearProfile();
     await Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context) {
       return const LoginPage();
@@ -77,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: _selectedIndex == 4
-            ? ProfilePage(uid: widget.user.uid)
+            ? const ProfilePage()
             : _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
