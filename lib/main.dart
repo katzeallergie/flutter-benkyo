@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/firebase_options.dart';
 import 'package:modelyprac/pages/loginPage.dart';
-import 'package:modelyprac/providers/profileProvider.dart';
-import 'package:modelyprac/providers/userProvider.dart';
 
+import '../core/providers.dart';
 import 'pages/ProfilePage.dart';
 
+// TODO: ログイン情報が残ってたら、自動ログインしてホームに飛ばす
+// TODO: Firestoreにユーザ作成する
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

@@ -4,9 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/components/profileDetails.dart';
 import 'package:modelyprac/components/profileTop.dart';
 
+import '../core/providers.dart';
 import '../dto/profile.dart';
-import '../providers/profileProvider.dart';
-import '../providers/userProvider.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});

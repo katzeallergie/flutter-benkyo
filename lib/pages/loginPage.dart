@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/providers.dart';
 import '../main.dart';
-import '../providers/userProvider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
