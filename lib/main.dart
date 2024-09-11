@@ -83,6 +83,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 ),
                 isDestructiveAction: true,
                 onPressed: () {
+                  Navigator.pop(context);
                   logout();
                 },
               ),
