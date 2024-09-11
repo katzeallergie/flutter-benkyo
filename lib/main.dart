@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/firebase_options.dart';
@@ -58,6 +59,38 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     });
   }
 
+  void showLogoutDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text("ログアウトしますか？"),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(
+                  "キャンセル",
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
+                isDefaultAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text(
+                  "ログアウト",
+                  style: TextStyle(color: Colors.redAccent),
+                ),
+                isDestructiveAction: true,
+                onPressed: () {
+                  logout();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
     ref.read(userProvider.notifier).clearUser();
@@ -76,7 +109,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           widget.title,
           style: const TextStyle(color: Colors.white),
         ),
-        actions: [IconButton(onPressed: logout, icon: Icon(Icons.logout))],
+        actions: [
+          IconButton(onPressed: showLogoutDialog, icon: Icon(Icons.logout))
+        ],
       ),
       body: Center(
         child: _selectedIndex == 4
