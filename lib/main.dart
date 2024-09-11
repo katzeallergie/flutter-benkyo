@@ -109,21 +109,3 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     );
   }
 }
-
-class CheckLoginUser extends StatefulWidget {
-  const CheckLoginUser({super.key, required this.email});
-
-  final String email;
-
-  @override
-  State<CheckLoginUser> createState() => _CheckLoginUserState();
-}
-
-class _CheckLoginUserState extends State<CheckLoginUser> {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("${widget.email}\nでログインしてまする"),
-    );
-  }
-}
