@@ -57,13 +57,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: !ref.read(profileProvider.notifier).hasProfile()
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: ProfileTop(profile: ref.watch(profileProvider)!),
                 ),
                 Expanded(
@@ -86,7 +86,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               context,
               MaterialPageRoute(
                   builder: (context) {
-                    return ProfileEditModal();
+                    return const ProfileEditModal();
                   },
                   fullscreenDialog: true));
         },

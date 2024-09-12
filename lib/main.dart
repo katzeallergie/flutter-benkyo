@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/firebase_options.dart';
+import 'package:modelyprac/pages/HomePage.dart';
 import 'package:modelyprac/pages/loginPage.dart';
 
 import '../core/providers.dart';
@@ -44,8 +45,8 @@ class MyHomePage extends ConsumerStatefulWidget {
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
-    const Text("ホーム"),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const HomePage(),
     const Text("検索"),
     const Text("お気に入り"),
     const Text("トーク"),
@@ -95,6 +96,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     await FirebaseAuth.instance.signOut();
     ref.read(userProvider.notifier).clearUser();
     ref.read(profileProvider.notifier).clearProfile();
+    ref.read(otherUsersProvider.notifier).clearProfiles();
     await Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) {
       return const LoginPage();

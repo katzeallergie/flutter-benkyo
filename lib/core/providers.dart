@@ -50,6 +50,24 @@ class ProfileNotifier extends Notifier<Profile?> {
 final profileProvider =
     NotifierProvider<ProfileNotifier, Profile?>(ProfileNotifier.new);
 
+class OtherUsersNotifier extends Notifier<List<Profile?>> {
+  @override
+  List<Profile> build() {
+    return [];
+  }
+
+  void setProfiles(List<Profile> profiles) {
+    state = profiles;
+  }
+
+  void clearProfiles() {
+    state = [];
+  }
+}
+
+final otherUsersProvider = NotifierProvider<OtherUsersNotifier, List<Profile?>>(
+    OtherUsersNotifier.new);
+
 class UserNotifier extends Notifier<User?> {
   @override
   User? build() {
