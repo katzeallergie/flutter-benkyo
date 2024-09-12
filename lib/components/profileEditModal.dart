@@ -96,26 +96,31 @@ class _ProfileEditModalState extends ConsumerState<ProfileEditModal> {
                               icon: const Icon(Icons.delete)));
                     }
                     return Container(
-                      margin: EdgeInsets.only(top: 10),
+                      margin: const EdgeInsets.only(top: 10),
                       padding: EdgeInsets.zero,
                       width: 50,
                       height: 50,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.green),
                       child: IconButton(
                         padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(minHeight: 0, minWidth: 0),
+                        constraints:
+                            const BoxConstraints(minHeight: 0, minWidth: 0),
                         onPressed: () {
                           setState(() {
                             tags.add("");
                             tagsController.add(TextEditingController());
                           });
+                          ref.read(profileProvider.notifier).setTags(
+                              tagsController
+                                  .map((controller) => controller.text)
+                                  .toList());
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.add,
                           color: Colors.white,
                         ),
                       ),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.green),
                     );
                   },
                   itemCount: tags.length + 1,
@@ -128,13 +133,13 @@ class _ProfileEditModalState extends ConsumerState<ProfileEditModal> {
                       save(user!.uid);
                       Navigator.pop(context);
                     },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(198, 99, 89, 1)),
                     child: const Text(
                       "保存する",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(198, 99, 89, 1))),
+                    )),
               )
             ],
           )),

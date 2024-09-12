@@ -34,10 +34,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends ConsumerStatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.user});
+  const MyHomePage({super.key, required this.title});
 
   final String title;
-  final User user;
 
   @override
   ConsumerState<MyHomePage> createState() => _MyHomePageState();
@@ -45,12 +44,12 @@ class MyHomePage extends ConsumerStatefulWidget {
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text("ホーム"),
-    Text("検索"),
-    Text("お気に入り"),
-    Text("トーク"),
-    ProfilePage()
+  static List<Widget> _widgetOptions = <Widget>[
+    const Text("ホーム"),
+    const Text("検索"),
+    const Text("お気に入り"),
+    const Text("トーク"),
+    const ProfilePage()
   ];
 
   void _onItemTapped(int index) {

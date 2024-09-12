@@ -13,6 +13,31 @@ class ProfileNotifier extends Notifier<Profile?> {
     state = profile;
   }
 
+  void init() {
+    state = Profile();
+  }
+
+  void setName(String name) {
+    state?.name = name;
+  }
+
+  void setId(String id) {
+    state?.id = id;
+  }
+
+  // いけてなさすぎる
+  void setProfileText(String profile) {
+    state?.profile = profile;
+  }
+
+  void setProfileImg(String profileImg) {
+    state?.profileImg = profileImg;
+  }
+
+  void setTags(List<String> tags) {
+    state?.tags = tags;
+  }
+
   bool hasProfile() {
     return state != null;
   }
@@ -44,3 +69,31 @@ class UserNotifier extends Notifier<User?> {
 
 // StateNotifierProviderでUserを管理
 final userProvider = NotifierProvider<UserNotifier, User?>(UserNotifier.new);
+
+class EmailNotifier extends Notifier<String> {
+  @override
+  String build() {
+    return "";
+  }
+
+  void setEmail(String email) {
+    state = email;
+  }
+}
+
+final emailProvider =
+    NotifierProvider<EmailNotifier, String>(EmailNotifier.new);
+
+class PasswordNotifier extends Notifier<String> {
+  @override
+  String build() {
+    return "";
+  }
+
+  void setPassword(String password) {
+    state = password;
+  }
+}
+
+final passwordProvider =
+    NotifierProvider<PasswordNotifier, String>(PasswordNotifier.new);
