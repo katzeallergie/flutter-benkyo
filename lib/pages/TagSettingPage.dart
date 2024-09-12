@@ -39,7 +39,7 @@ class _TagSettingPageState extends ConsumerState<TagSettingPage> {
         await Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (context) {
           return const MyHomePage(title: 'MODELY');
-        }), ModalRoute.withName("/"));
+        }), (route) => false);
       } catch (e) {
         print(e);
         // 登録失敗
@@ -57,14 +57,14 @@ class _TagSettingPageState extends ConsumerState<TagSettingPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              constraints: BoxConstraints(maxHeight: 300),
+              constraints: const BoxConstraints(maxHeight: 300),
               child: ListView.builder(
                 itemBuilder: (context, index) {
                   if (index != tagsController.length) {
                     return ListTile(
                         contentPadding: EdgeInsets.zero,
                         title: TextField(
-                          cursorColor: Color.fromRGBO(198, 99, 89, 1),
+                          cursorColor: const Color.fromRGBO(198, 99, 89, 1),
                           decoration: InputDecoration(
                             labelText: index == 0 ? "タグ" : null,
                             labelStyle: const TextStyle(color: Colors.grey),

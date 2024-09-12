@@ -95,10 +95,10 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     await FirebaseAuth.instance.signOut();
     ref.read(userProvider.notifier).clearUser();
     ref.read(profileProvider.notifier).clearProfile();
-    await Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) {
+    await Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) {
       return const LoginPage();
-    }));
+    }), (route) => false);
   }
 
   @override
