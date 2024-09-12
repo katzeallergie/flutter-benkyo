@@ -11,7 +11,14 @@ import '../core/providers.dart';
 import 'pages/ProfilePage.dart';
 
 // TODO: ログイン情報が残ってたら、自動ログインしてホームに飛ばす
-// TODO: Firestoreにユーザ作成する
+// TODO: 画像をCloudStorageに保存する。画像フォルダから選べるようにする。
+// TODO: アーキテクチャを意識してリファクタする
+// TODO: 毎回色つけたりしているので、グローバルで色設定するように
+// TODO: 空入力でも進めるようになっているので、バリデーションかける
+// TODO: 他の人のプロフィールページに飛べるようにする
+// TODO: 年収ごとにラベル分けできるように
+// TODO: チャット機能
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
