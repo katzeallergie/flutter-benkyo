@@ -50,7 +50,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     Text("検索"),
     Text("お気に入り"),
     Text("トーク"),
-    Text("hoge")
+    ProfilePage()
   ];
 
   void _onItemTapped(int index) {
@@ -64,28 +64,28 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: Text("ログアウトしますか？"),
+            title: const Text("ログアウトしますか？"),
             actions: [
               CupertinoDialogAction(
-                child: Text(
-                  "キャンセル",
-                  style: TextStyle(color: Colors.blueAccent),
-                ),
                 isDefaultAction: true,
                 onPressed: () {
                   Navigator.pop(context);
                 },
+                child: const Text(
+                  "キャンセル",
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
               ),
               CupertinoDialogAction(
-                child: Text(
-                  "ログアウト",
-                  style: TextStyle(color: Colors.redAccent),
-                ),
                 isDestructiveAction: true,
                 onPressed: () {
                   Navigator.pop(context);
                   logout();
                 },
+                child: const Text(
+                  "ログアウト",
+                  style: TextStyle(color: Colors.redAccent),
+                ),
               ),
             ],
           );
@@ -111,13 +111,13 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           style: const TextStyle(color: Colors.white),
         ),
         actions: [
-          IconButton(onPressed: showLogoutDialog, icon: Icon(Icons.logout))
+          IconButton(
+              onPressed: showLogoutDialog, icon: const Icon(Icons.logout))
         ],
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Center(
-        child: _selectedIndex == 4
-            ? const ProfilePage()
-            : _widgetOptions.elementAt(_selectedIndex),
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -136,8 +136,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         ],
         currentIndex: _selectedIndex,
         // selectedItemColor: Color.fromRGBO(227, 163, 189, 1),
-        selectedItemColor: Color.fromRGBO(187, 150, 132, 1),
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        selectedItemColor: const Color.fromRGBO(187, 150, 132, 1),
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         unselectedItemColor: Colors.white,
         backgroundColor: const Color.fromRGBO(198, 99, 89, 1),
         onTap: _onItemTapped,

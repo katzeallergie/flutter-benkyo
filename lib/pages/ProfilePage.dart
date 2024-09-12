@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/components/profileDetails.dart';
+import 'package:modelyprac/components/profileEditModal.dart';
 import 'package:modelyprac/components/profileTop.dart';
 
 import '../core/providers.dart';
@@ -79,6 +80,19 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 )
               ],
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) {
+                    return ProfileEditModal();
+                  },
+                  fullscreenDialog: true));
+        },
+        backgroundColor: const Color.fromRGBO(198, 99, 89, 1),
+        child: const Icon(Icons.edit, color: Colors.white),
+      ),
     );
   }
 }
