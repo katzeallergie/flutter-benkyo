@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -157,3 +158,14 @@ class ProfileImageNotifier extends AsyncNotifier<String> {
 final profileImageProvider =
     AsyncNotifierProvider<ProfileImageNotifier, String>(
         ProfileImageNotifier.new);
+
+class FireStoreNotifier extends Notifier<FirebaseFirestore> {
+  @override
+  FirebaseFirestore build() {
+    return FirebaseFirestore.instance;
+  }
+}
+
+final fireStoreProvider =
+    NotifierProvider<FireStoreNotifier, FirebaseFirestore>(
+        FireStoreNotifier.new);

@@ -16,12 +16,9 @@ class ProfilePage extends ConsumerStatefulWidget {
 }
 
 class _ProfilePageState extends ConsumerState<ProfilePage> {
-  late FirebaseFirestore firestore;
-
   @override
   void initState() {
     super.initState();
-    firestore = FirebaseFirestore.instance;
     final user = ref.read(userProvider); // userをinitStateで取得
     if (!ref.read(profileProvider.notifier).hasProfile() && user != null) {
       _fetchProfile(user.uid);
@@ -29,9 +26,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   Future<void> _fetchProfile(String uid) async {
+    var firestore = ref.read(fireStoreProvider);
     try {
       DocumentSnapshot documentSnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+          await firestore.collection('users').doc(uid).get();
 
       if (documentSnapshot.exists) {
         Map<String, dynamic> data =

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/components/profileTop.dart';
@@ -23,7 +22,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Future<void> _fetchUsers() async {
-    var firestore = FirebaseFirestore.instance;
+    var firestore = ref.read(fireStoreProvider);
     var user = ref.read(userProvider);
     var querySnapshot = await firestore.collection("users").get();
     List<Profile> profiles =

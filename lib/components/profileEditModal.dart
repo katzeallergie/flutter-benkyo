@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,7 +20,8 @@ class _ProfileEditModalState extends ConsumerState<ProfileEditModal> {
   List<TextEditingController> tagsController = [];
 
   Future<void> save(String uid) async {
-    var document = FirebaseFirestore.instance.collection("users").doc(uid);
+    var firestore = ref.read(fireStoreProvider);
+    var document = firestore.collection("users").doc(uid);
     var tags = tagsController
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)

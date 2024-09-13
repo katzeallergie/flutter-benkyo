@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,7 +34,8 @@ class _TagSettingPageState extends ConsumerState<TagSettingPage> {
         var profileImgUrl = ref.read(profileImageProvider).value;
         ref.read(profileProvider.notifier).setProfileImg(profileImgUrl!);
         var profile = ref.read(profileProvider);
-        var collection = FirebaseFirestore.instance.collection("users");
+        var firestore = ref.read(fireStoreProvider);
+        var collection = firestore.collection("users");
         collection.doc(result.user?.uid).set({
           "name": profile?.name,
           "id": profile?.id,
