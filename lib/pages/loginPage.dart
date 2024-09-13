@@ -5,6 +5,8 @@ import 'package:modelyprac/pages/profileSettingPage.dart';
 import '../core/providers.dart';
 import '../main.dart';
 
+// TODO: 新規登録時に重複するメアドの場合はこの画面でアラートを出してあげる
+
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 

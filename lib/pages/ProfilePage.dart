@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/components/profileDetails.dart';
-import 'package:modelyprac/components/profileEditModal.dart';
 import 'package:modelyprac/components/profileTop.dart';
+import 'package:modelyprac/modals/profileEditModal.dart';
 
 import '../core/providers.dart';
 import '../dto/profile.dart';
