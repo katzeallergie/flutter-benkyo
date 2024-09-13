@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,13 +28,19 @@ class _TagSettingPageState extends ConsumerState<TagSettingPage> {
         var result = await auth.createUserWithEmailAndPassword(
             email: email, password: password);
         ref.read(userProvider.notifier).setUser(result.user);
+        var profileImgFileUrl = ref.read(profileImageProvider).value;
+        await ref
+            .read(profileImageProvider.notifier)
+            .uploadImage(File(profileImgFileUrl!));
+        var profileImgUrl = ref.read(profileImageProvider).value;
+        ref.read(profileProvider.notifier).setProfileImg(profileImgUrl!);
         var profile = ref.read(profileProvider);
         var collection = FirebaseFirestore.instance.collection("users");
         collection.doc(result.user?.uid).set({
           "name": profile?.name,
           "id": profile?.id,
           "profile": profile?.profile,
-          "profileImg": profile?.profileImg,
+          "profileImg": ref.read(profileImageProvider).value,
           "tags": profile?.tags
         });
 

@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/firebase_options.dart';
 import 'package:modelyprac/pages/HomePage.dart';
+import 'package:modelyprac/pages/ProfileImageSettingPage.dart';
 import 'package:modelyprac/pages/loginPage.dart';
 
 import '../core/providers.dart';
 import 'pages/ProfilePage.dart';
 
 // TODO: ログイン情報が残ってたら、自動ログインしてホームに飛ばす
-// TODO: 画像をCloudStorageに保存する。画像フォルダから選べるようにする。
 // TODO: アーキテクチャを意識してリファクタする
 // TODO: 毎回色つけたりしているので、グローバルで色設定するように
 // TODO: 空入力でも進めるようになっているので、バリデーションかける
@@ -54,7 +54,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     const HomePage(),
-    const Text("検索"),
+    const ProfileImageSettingPage(),
     const Text("お気に入り"),
     const Text("トーク"),
     const ProfilePage()
@@ -104,6 +104,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     ref.read(userProvider.notifier).clearUser();
     ref.read(profileProvider.notifier).clearProfile();
     ref.read(otherUsersProvider.notifier).clearProfiles();
+    ref.read(profileImageProvider.notifier).clear();
     await Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) {
       return const LoginPage();

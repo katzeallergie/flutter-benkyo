@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:modelyprac/core/providers.dart';
 
 import '../dto/profile.dart';
@@ -23,9 +26,11 @@ class _ProfileEditModalState extends ConsumerState<ProfileEditModal> {
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
+    var profileImage = ref.read(profileImageProvider).value;
     await document.update({
       "name": nameController.text,
       "profile": profileController.text,
+      "profileImg": profileImage,
       "tags": tags
     });
     var snapshot = await document.get();
@@ -46,6 +51,20 @@ class _ProfileEditModalState extends ConsumerState<ProfileEditModal> {
     var tags = profile.tags;
     tagsController = List.generate(
         tags.length, (index) => TextEditingController(text: tags[index]));
+    final profileImageUrl = ref.watch(profileImageProvider);
+
+    Future upload() async {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        final imageFile = File(image.path);
+        try {
+          await ref.read(profileImageProvider.notifier).uploadImage(imageFile);
+        } catch (e) {
+          print(e);
+        }
+        return image;
+      }
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -57,10 +76,46 @@ class _ProfileEditModalState extends ConsumerState<ProfileEditModal> {
           child: Center(
               child: Column(
             children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                    hintText: "Your name", labelText: "名前"),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                          hintText: "Your name", labelText: "名前"),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Stack(children: [
+                      Transform.scale(
+                          scale: 0.8,
+                          child: CircleAvatar(
+                              radius: 80,
+                              backgroundImage:
+                                  profileImageUrl.when(data: (imageUrl) {
+                                return imageUrl.isNotEmpty
+                                    ? NetworkImage(imageUrl)
+                                    : NetworkImage(profile.profileImg);
+                              }, error: (err, stack) {
+                                AssetImage("assets/dummy.png");
+                              }, loading: () {
+                                AssetImage("assets/dummy.png");
+                              }))),
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () async {
+                            upload();
+                          },
+                        ),
+                      ),
+                    ]),
+                  )
+                ],
               ),
               const SizedBox(
                 height: 20,

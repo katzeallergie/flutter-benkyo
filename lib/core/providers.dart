@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../dto/profile.dart';
@@ -115,3 +118,42 @@ class PasswordNotifier extends Notifier<String> {
 
 final passwordProvider =
     NotifierProvider<PasswordNotifier, String>(PasswordNotifier.new);
+
+class ProfileImageNotifier extends AsyncNotifier<String> {
+  @override
+  Future<String> build() async {
+    final user = ref.read(userProvider);
+    if (user != null) {
+      final Reference reference =
+          FirebaseStorage.instance.ref().child("profiles/${user.uid}");
+      String imageUrl = await reference.getDownloadURL();
+      return imageUrl;
+    }
+    return "";
+  }
+
+  Future<void> uploadImage(File imageFile) async {
+    try {
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('profiles/${imageFile.path.split('/').last}');
+      await storageRef.putFile(imageFile); // Cloud Storageに画像をアップロード
+      final downloadUrl = await storageRef.getDownloadURL(); // ダウンロードURLを取得
+      state = AsyncValue.data(downloadUrl);
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
+  }
+
+  void set(String imageUrl) async {
+    state = AsyncValue.data(imageUrl);
+  }
+
+  void clear() {
+    state = const AsyncValue.data("");
+  }
+}
+
+final profileImageProvider =
+    AsyncNotifierProvider<ProfileImageNotifier, String>(
+        ProfileImageNotifier.new);

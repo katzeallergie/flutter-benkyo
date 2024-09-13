@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/core/providers.dart';
-import 'package:modelyprac/pages/TagSettingPage.dart';
+import 'package:modelyprac/pages/ProfileImageSettingPage.dart';
 
 final List<Map<String, String>> settings = [
   {"name": "name", "display": "名前"},
   {"name": "id", "display": "ID"},
   {"name": "profile", "display": "自己紹介"},
-  {"name": "profileImg", "display": "プロフィール画像のURL"},
 ];
 
 class ProfileSettingPage extends ConsumerStatefulWidget {
@@ -33,17 +32,15 @@ class _ProfileSettingPageState extends ConsumerState<ProfileSettingPage> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 80),
+        padding: const EdgeInsets.symmetric(horizontal: 80),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           TextField(
             controller: controller,
-            cursorColor: Color.fromRGBO(198, 99, 89, 1),
+            cursorColor: const Color.fromRGBO(198, 99, 89, 1),
             decoration: InputDecoration(
                 labelText: displayName,
                 labelStyle: const TextStyle(color: Colors.grey),
-                hintText: name == "profileImg"
-                    ? "画像URLを入力してください"
-                    : "$displayNameを入力してください",
+                hintText: "$displayNameを入力してください",
                 hintStyle: const TextStyle(color: Colors.grey),
                 focusedBorder: const UnderlineInputBorder(
                     borderSide:
@@ -53,7 +50,7 @@ class _ProfileSettingPageState extends ConsumerState<ProfileSettingPage> {
                 : TextInputType.text,
             maxLines: name == "profile" ? null : 1,
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ElevatedButton(
@@ -71,11 +68,6 @@ class _ProfileSettingPageState extends ConsumerState<ProfileSettingPage> {
                         .read(profileProvider.notifier)
                         .setProfileText(controller.text);
                     break;
-                  case "profileImg":
-                    ref
-                        .read(profileProvider.notifier)
-                        .setProfileImg(controller.text);
-                    break;
                   default:
                     break;
                 }
@@ -85,16 +77,16 @@ class _ProfileSettingPageState extends ConsumerState<ProfileSettingPage> {
                       ? ProfileSettingPage(
                           index: widget.index + 1,
                         )
-                      : const TagSettingPage();
+                      : const ProfileImageSettingPage();
                 }));
               },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromRGBO(198, 99, 89, 1)),
               child: const Text(
                 "次へ",
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromRGBO(198, 99, 89, 1))),
+              )),
         ]),
       ),
     );
