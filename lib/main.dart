@@ -23,6 +23,15 @@ Future<void> main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
+// 特定の色をベースにカラースキーム作ってくれるらしい
+var colorScheme = ColorScheme.fromSeed(
+    seedColor: Color.fromRGBO(
+  198,
+  99,
+  89,
+  1,
+));
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -32,8 +41,15 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
           useMaterial3: true,
-          appBarTheme:
-              const AppBarTheme(color: Color.fromRGBO(198, 99, 89, 1))),
+          colorScheme: colorScheme,
+          appBarTheme: const AppBarTheme(
+            color: Color.fromRGBO(
+              198,
+              99,
+              89,
+              1,
+            ),
+          )),
       home: const LoginPage(),
     );
   }
