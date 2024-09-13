@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/firebase_options.dart';
 import 'package:modelyprac/pages/HomePage.dart';
-import 'package:modelyprac/pages/ProfileImageSettingPage.dart';
 import 'package:modelyprac/pages/loginPage.dart';
 
 import '../core/providers.dart';
@@ -54,7 +53,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     const HomePage(),
-    const ProfileImageSettingPage(),
+    const Text("検索"),
     const Text("お気に入り"),
     const Text("トーク"),
     const ProfilePage()
