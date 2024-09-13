@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modelyprac/pages/profileSettingPage.dart';
@@ -19,7 +18,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final String email = '';
   final String password = '';
   String errorText = "";
-  final FirebaseAuth auth = FirebaseAuth.instance;
   bool isObscure = true;
   bool hasError = false;
 
@@ -60,6 +58,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
 
     Future<void> login(context) async {
+      var auth = ref.read(firebaseAuthProvider);
       try {
         var result = await auth.signInWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);

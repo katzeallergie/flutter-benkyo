@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +98,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   }
 
   Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
+    var auth = ref.read(firebaseAuthProvider);
+    await auth.signOut();
     ref.read(userProvider.notifier).clearUser();
     ref.read(profileProvider.notifier).clearProfile();
     ref.read(otherUsersProvider.notifier).clearProfiles();

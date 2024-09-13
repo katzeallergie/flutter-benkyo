@@ -75,7 +75,8 @@ final otherUsersProvider = NotifierProvider<OtherUsersNotifier, List<Profile?>>(
 class UserNotifier extends Notifier<User?> {
   @override
   User? build() {
-    return FirebaseAuth.instance.currentUser;
+    var auth = ref.read(firebaseAuthProvider);
+    return auth.currentUser;
   }
 
   // ログイン時にユーザーをセット
@@ -169,3 +170,14 @@ class FireStoreNotifier extends Notifier<FirebaseFirestore> {
 final fireStoreProvider =
     NotifierProvider<FireStoreNotifier, FirebaseFirestore>(
         FireStoreNotifier.new);
+
+class FirebaseAuthNotifier extends Notifier<FirebaseAuth> {
+  @override
+  FirebaseAuth build() {
+    return FirebaseAuth.instance;
+  }
+}
+
+final firebaseAuthProvider =
+    NotifierProvider<FirebaseAuthNotifier, FirebaseAuth>(
+        FirebaseAuthNotifier.new);
