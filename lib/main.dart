@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:modelyprac/pages/loginPage.dart';
 import '../core/providers.dart';
 import 'pages/ProfilePage.dart';
 
-// TODO: ログイン情報が残ってたら、自動ログインしてホームに飛ばす
 // TODO: アーキテクチャを意識してリファクタする
 // TODO: 毎回色つけたりしているので、グローバルで色設定するように
 // TODO: 空入力でも進めるようになっているので、バリデーションかける
@@ -25,33 +25,44 @@ Future<void> main() async {
 
 // 特定の色をベースにカラースキーム作ってくれるらしい
 var colorScheme = ColorScheme.fromSeed(
-    seedColor: Color.fromRGBO(
+    seedColor: const Color.fromRGBO(
   198,
   99,
   89,
   1,
 ));
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: colorScheme,
-          appBarTheme: const AppBarTheme(
-            color: Color.fromRGBO(
-              198,
-              99,
-              89,
-              1,
-            ),
-          )),
-      home: const LoginPage(),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: colorScheme,
+            appBarTheme: const AppBarTheme(
+              color: Color.fromRGBO(
+                198,
+                99,
+                89,
+                1,
+              ),
+            )),
+        home: StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasData) {
+                return const MyHomePage(title: "MODELY");
+              } else {
+                return const LoginPage();
+              }
+            }));
   }
 }
 
@@ -138,7 +149,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           IconButton(
               onPressed: showLogoutDialog, icon: const Icon(Icons.logout))
         ],
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -159,7 +170,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               icon: Icon(Icons.account_circle), label: "マイページ"),
         ],
         currentIndex: _selectedIndex,
-        // selectedItemColor: Color.fromRGBO(227, 163, 189, 1),
         selectedItemColor: const Color.fromRGBO(187, 150, 132, 1),
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         unselectedItemColor: Colors.white,
